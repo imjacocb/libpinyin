@@ -107,21 +107,28 @@ add_custom_command(
         ${CMAKE_BINARY_DIR}/data/pinyin_index.bin
 )
 
-install(
-    FILES
-        ${BINARY_MODEL_DATA_FILES}
-    DESTINATION
-        ${DIR_SHARE_LIBPINYIN}/data
-)
-
-set_directory_properties(
-    PROPERTIES
-        ADDITIONAL_MAKE_CLEAN_FILES
-            ${BINARY_MODEL_DATA_FILES}
-)
-
 configure_file(
   table.conf.in
   table.conf
   @ONLY
+)
+
+install(
+    FILES
+        ${BINARY_MODEL_DATA_FILES}
+        ${CMAKE_BINARY_DIR}/data/table.conf
+        ${CMAKE_BINARY_DIR}/data/opengram.bin
+        ${CMAKE_BINARY_DIR}/data/merged.bin
+        ${CMAKE_SOURCE_DIR}/data/gb_char.table
+        ${CMAKE_SOURCE_DIR}/data/gbk_char.table
+    DESTINATION
+        ${DIR_SHARE_LIBPINYIN}/data
+)
+
+string(REPLACE ";" " " BINARY_MODEL_DATA_FILES_STR "${BINARY_MODEL_DATA_FILES};${CMAKE_SOURCE_DIR}/data/table.conf;${CMAKE_SOURCE_DIR}/data/gb_char.table;${CMAKE_SOURCE_DIR}/data/gbk_char.table;${CMAKE_BINARY_DIR}/data/opengram.bin")
+
+set_directory_properties(
+    PROPERTIES
+        ADDITIONAL_MAKE_CLEAN_FILES
+            "${BINARY_MODEL_DATA_FILES_STR}"
 )
